@@ -1,0 +1,46 @@
+datasets:
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_newspaper420k_box-type-md.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered/mineru2_inhouse_newspaper420k_img-box.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_zh800k_img-box.json
+    sampling_strategy: "first:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_en800k_img-box.json
+    sampling_strategy: "first:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_exam_en_img-box.json
+    sampling_strategy: "first:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_exam_zh_img-box.json
+    sampling_strategy: "first:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_table_en_img-box.json
+    sampling_strategy: "first:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_table_zh_img-box.json
+    sampling_strategy: "first:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_3col_en_img-box.json
+    sampling_strategy: "first:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_3col_zh_img-box.json
+    sampling_strategy: "first:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_en800k_box-type-md.json
+    sampling_strategy: "last:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_zh800k_box-type-md.json
+    sampling_strategy: "last:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_exam_en_box-type-md.json
+    sampling_strategy: "last:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_exam_zh_box-type-md.json
+    sampling_strategy: "last:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_table_en_box-type-md.json
+    sampling_strategy: "last:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_table_zh_box-type-md.json
+    sampling_strategy: "last:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_3col_en_box-type-md.json
+    sampling_strategy: "last:20%"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_3col_zh_box-type-md.json
+    sampling_strategy: "last:20%"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/bounding_box/Mineru_Notes_img-box.json
+    sampling_strategy: "last:20%"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/bounding_box/Mineru_Notes_Math_img-box.json
+    sampling_strategy: "first:20%"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/bounding_box/Mineru_Notes_box-type-md.json
+    sampling_strategy: "last:20%"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/bounding_box/Mineru_Notes_Math_box-type-md.json
+    sampling_strategy: "first:20%"
+  

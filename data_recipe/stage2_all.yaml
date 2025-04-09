@@ -1,0 +1,33 @@
+datasets:
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_cn-2000k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_en-2000k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2-Continue/Mineru_cn-1000k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2-Continue/Mineru_en-1000k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_exam_zh-140k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_exam_en-8k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_table_zh-440k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_table_en-100k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_3col_zh-30k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_3col_en-20k.json
+    sampling_strategy: "all"  
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2-Continue/Mineru_newspaper-390k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/zhangrui/shared_data/mineru_lvlm_data/mineru_encn35K.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/zhangrui/shared_data/mineru_lvlm_data/mineru_math_cn200K.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/zhangrui/shared_data/mineru_lvlm_data/mineru_math_en200K.json
+    sampling_strategy: "all"
+  # - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_Notes_100K.json
+  #   sampling_strategy: "all"
+  # - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_Notes_Math_50K.json
+  #   sampling_strategy: "all"
