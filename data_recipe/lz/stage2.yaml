@@ -1,0 +1,31 @@
+datasets:
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_cn-2000k.json
+    sampling_strategy: "first:30%"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_en-2000k.json
+    sampling_strategy: "first:30%"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_exam_zh-140k.json
+    sampling_strategy: "first:10%"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_exam_en-8k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_table_zh-440k.json
+    sampling_strategy: "first:25%"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_table_en-100k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_3col_zh-30k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_3col_en-20k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_Notes_100K.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_Notes_Math_50K.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_Notes_100K.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_Notes_Math_50K.json
+    sampling_strategy: "all"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/Stage2/Mineru_newspaper_zh-150k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/Stage2/Mineru_newspaper_zh-150k.json
+    sampling_strategy: "all"
+  # - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/Stage2/OpenOrca-1000k.json
+  #   sampling_strategy: "first:50%"

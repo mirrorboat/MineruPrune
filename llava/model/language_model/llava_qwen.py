@@ -25,26 +25,25 @@ from transformers.modeling_outputs import CausalLMOutputWithPast
 from transformers.generation.utils import GenerateOutput
 
 from llava.model.llava_arch import LlavaMetaModel, LlavaMetaForCausalLM
-from transformers import Qwen2Config, Qwen2Model, Qwen2ForCausalLM
-
-
+from transformers import Qwen2Config
+from llava.model.modeling_qwen2_mask import Qwen2ModelMask, Qwen2ForCausalLMMask
 
 class LlavaQwenConfig(Qwen2Config):
     model_type = "llava_qwen"
 
 
-class LlavaQwenModel(LlavaMetaModel, Qwen2Model):
+class LlavaQwenModel(LlavaMetaModel, Qwen2ModelMask):
     config_class = LlavaQwenConfig
 
     def __init__(self, config: Qwen2Config):
         super(LlavaQwenModel, self).__init__(config)
 
 
-class LlavaQwenForCausalLM(Qwen2ForCausalLM, LlavaMetaForCausalLM):
+class LlavaQwenForCausalLM(Qwen2ForCausalLMMask, LlavaMetaForCausalLM):
     config_class = LlavaQwenConfig
 
     def __init__(self, config):
-        super(Qwen2ForCausalLM, self).__init__(config)
+        super(Qwen2ForCausalLMMask, self).__init__(config)
         config.rope_scaling = None
         self.model = LlavaQwenModel(config)
         
@@ -71,10 +70,17 @@ class LlavaQwenForCausalLM(Qwen2ForCausalLM, LlavaMetaForCausalLM):
         image_sizes: Optional[List[List[int]]] = None,
         return_dict: Optional[bool] = None,
         cache_position: Optional[torch.LongTensor] = None,
+        pruned_steps: int = None,
+        # pruned_steps: Optional[torch.LongTensor] = None,
     ) -> Union[Tuple, CausalLMOutputWithPast]:
-
+        # print("LlavaQwenForCausalLM called", flush=True)
+        # print(f"pruned_steps LlavaQwenForCausalLM: {pruned_steps}", flush=True)
         if inputs_embeds is None:
             (input_ids, position_ids, attention_mask, past_key_values, inputs_embeds, labels) = self.prepare_inputs_labels_for_multimodal(input_ids, position_ids, attention_mask, past_key_values, labels, images, image_sizes)
+        
+        # assert pruned_steps is not None, "pruned_steps should not be None"
+        # print(pruned_steps, flush=True)
+            
         return super().forward(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -86,6 +92,7 @@ class LlavaQwenForCausalLM(Qwen2ForCausalLM, LlavaMetaForCausalLM):
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
+            pruned_steps=pruned_steps,
         )
 
     @torch.no_grad()

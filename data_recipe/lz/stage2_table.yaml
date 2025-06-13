@@ -1,0 +1,29 @@
+datasets:
+  - json_path: /mnt/hwfile/opendatalab/bigdata_mineru/wufan/data/tsr_data/Inhouse_data/refine_md_table/teds0.88_refined_table_en_normed_md_data_100k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/bigdata_mineru/wufan/data/tsr_data/Inhouse_data/refine_md_table/teds0.88_refined_table_zh_normed_md_data_440k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/Stage2-Continue/Mineru_cn-1000k.json
+    sampling_strategy: "first:1%"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/Stage2-Continue/Mineru_en-1000k.json
+    sampling_strategy: "first:1%"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_exam_zh-140k.json
+    sampling_strategy: "first:10%"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_exam_en-8k.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_3col_zh-30k.json
+    sampling_strategy: "first:30%"
+  - json_path: /mnt/hwfile/opendatalab/liuzheng/Mineru/dataset/Stage2/Mineru_3col_en-20k.json
+    sampling_strategy: "first:50%"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/Stage2-Continue/Mineru_newspaper-390k.json
+    sampling_strategy: "first:3%"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/Stage2-Continue/Mineru_Notes-100k.json
+    sampling_strategy: "first:10%"
+  - json_path: /mnt/petrelfs/liuzheng/Mineru2/playground/dataset/Stage2-Continue/Mineru_Notes_Math-50k.json
+    sampling_strategy: "first:20%"
+  - json_path: /mnt/hwfile/opendatalab/bigdata_mineru/zhangrui/shared_data/mineru_lvlm_data/mineru_encn35K.json
+    sampling_strategy: "all"
+  - json_path: /mnt/hwfile/opendatalab/bigdata_mineru/zhangrui/shared_data/mineru_lvlm_data/mineru_math_cn200K.json
+    sampling_strategy: "first:50%"
+  - json_path: /mnt/hwfile/opendatalab/bigdata_mineru/zhangrui/shared_data/mineru_lvlm_data/mineru_math_en200K.json
+    sampling_strategy: "first:50%"

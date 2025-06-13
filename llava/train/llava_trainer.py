@@ -135,6 +135,19 @@ class LengthGroupedSampler(Sampler):
 
 
 class LLaVATrainer(Trainer):
+    def training_step(self, model, inputs):
+        # if hasattr(self.data_collator, 'global_step'):
+        #     # self.data_collator.global_step = self.state.global_step
+        #     print(f"***old {self.data_collator.global_step}", flush=True)
+        #     self.data_collator.set_global_step(self.state.global_step)
+        #     print(f"***Setting global step {self.data_collator.global_step}", flush=True)
+        # breakpoint()
+        # inputs["pruned_steps"] = self.state.global_step
+        # pruned_steps设置为0维tensor，其值是self.state.global_step
+        inputs["pruned_steps"] = torch.tensor(self.state.global_step)
+        # print(self.state.global_step)
+
+        return super().training_step(model, inputs)
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.Sampler]:
         if self.train_dataset is None or not has_length(self.train_dataset):
@@ -151,6 +164,40 @@ class LLaVATrainer(Trainer):
         else:
             return super()._get_train_sampler()
 
+    def evaluate(self, eval_dataset=None, ignore_keys=None, metric_key_prefix="eval"):
+        """
+        在评估前设置 model.set_eval(True)，在评估完成后恢复 model.set_eval(False)
+        """
+        eval_dataset = eval_dataset if eval_dataset is not None else self.eval_dataset
+
+        if eval_dataset is None:
+            raise ValueError("Evaluation requires an `eval_dataset`.")
+
+        model = self.model
+
+        model.get_model().set_l0_module_eval(True)
+
+        try:
+            eval_results = super().evaluate(eval_dataset, ignore_keys=ignore_keys, metric_key_prefix=metric_key_prefix)
+        finally:
+            model.get_model().set_l0_module_eval(False)
+
+        return eval_results
+
+
+    # def compute_loss(self, model, inputs, return_outputs=False):
+    #     outputs = model(**inputs)
+    #     loss = outputs.loss
+    #     ce_loss = outputs.ce_loss
+    #     lag_loss = outputs.lag_loss
+    #     l0_output_1 = outputs.l0_output_1
+    #     # l0_output_2 = outputs.l0_output_2
+    #     l0_output_1_logs = {f'{name}': val.cpu().item() if torch.is_tensor(val) else val for name, val in l0_output_1.items()}
+    #     # l0_output_2_logs = {f'{name}': val.cpu().item() if torch.is_tensor(val) else val for name, val in l0_output_2.items()}
+    #     self.log({"TRAIN loss": loss.item(), "ce_loss": ce_loss.item(), "lag_loss": lag_loss.item(), **l0_output_1_logs})
+
+    #     return (loss, outputs) if return_outputs else loss
+
     def create_optimizer(self):
         """
         Setup the optimizer.
@@ -164,6 +211,7 @@ class LLaVATrainer(Trainer):
         opt_model = self.model
 
         if self.optimizer is None:
+            optimizer_grouped_parameters = None
             decay_parameters = get_parameter_names(opt_model, ALL_LAYERNORM_LAYERS)
             decay_parameters = [name for name in decay_parameters if "bias" not in name]
             if self.args.mm_projector_lr is not None:
@@ -174,40 +222,40 @@ class LLaVATrainer(Trainer):
                     optimizer_grouped_parameters = [
                         {
                             "params": [
-                                p for n, p in opt_model.named_parameters() if (n in decay_parameters and n not in projector_parameters and n not in vision_tower_parameters and p.requires_grad)
+                                p for n, p in opt_model.named_parameters() if (n in decay_parameters and n not in projector_parameters and n not in vision_tower_parameters and p.requires_grad and "l0_module" not in n and "model.layers.19" not in n and "model.layers.22" not in n )
                             ],
                             "weight_decay": self.args.weight_decay,
                         },
+                        # {
+                        #     "params": [
+                        #         p for n, p in opt_model.named_parameters() if (n in decay_parameters and n not in projector_parameters and n in vision_tower_parameters and p.requires_grad and "l0_module" not in n)
+                        #     ],
+                        #     "weight_decay": self.args.weight_decay,
+                        #     "lr": self.args.mm_vision_tower_lr,
+                        # },
                         {
                             "params": [
-                                p for n, p in opt_model.named_parameters() if (n in decay_parameters and n not in projector_parameters and n in vision_tower_parameters and p.requires_grad)
-                            ],
-                            "weight_decay": self.args.weight_decay,
-                            "lr": self.args.mm_vision_tower_lr,
-                        },
-                        {
-                            "params": [
-                                p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n not in projector_parameters and n not in vision_tower_parameters and p.requires_grad)
-                            ],
-                            "weight_decay": 0.0,
-                        },
-                        {
-                            "params": [
-                                p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n not in projector_parameters and n in vision_tower_parameters and p.requires_grad)
+                                p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n not in projector_parameters and n not in vision_tower_parameters and p.requires_grad and "l0_module" not in n and "model.layers.19" not in n and "model.layers.22" not in n)
                             ],
                             "weight_decay": 0.0,
-                            "lr": self.args.mm_vision_tower_lr,
                         },
+                        # {
+                        #     "params": [
+                        #         p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n not in projector_parameters and n in vision_tower_parameters and p.requires_grad and "l0_module" not in n)
+                        #     ],
+                        #     "weight_decay": 0.0,
+                        #     "lr": self.args.mm_vision_tower_lr,
+                        # },
                         {
                             "params": [
-                                p for n, p in opt_model.named_parameters() if (n in decay_parameters and n in projector_parameters and p.requires_grad)
+                                p for n, p in opt_model.named_parameters() if (n in decay_parameters and n in projector_parameters and p.requires_grad and "l0_module" not in n)
                             ],
                             "weight_decay": self.args.weight_decay,
                             "lr": self.args.mm_projector_lr,
                         },
                         {
                             "params": [
-                                p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n in projector_parameters and p.requires_grad)
+                                p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n in projector_parameters and p.requires_grad and "l0_module" not in n)
                             ],
                             "weight_decay": 0.0,
                             "lr": self.args.mm_projector_lr,
@@ -217,26 +265,26 @@ class LLaVATrainer(Trainer):
                     optimizer_grouped_parameters = [
                         {
                             "params": [
-                                p for n, p in opt_model.named_parameters() if (n in decay_parameters and n not in projector_parameters and p.requires_grad)
+                                p for n, p in opt_model.named_parameters() if (n in decay_parameters and n not in projector_parameters and p.requires_grad and "l0_module" not in n)
                             ],
                             "weight_decay": self.args.weight_decay,
                         },
                         {
                             "params": [
-                                p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n not in projector_parameters and p.requires_grad)
+                                p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n not in projector_parameters and p.requires_grad and "l0_module" not in n)
                             ],
                             "weight_decay": 0.0,
                         },
                         {
                             "params": [
-                                p for n, p in opt_model.named_parameters() if (n in decay_parameters and n in projector_parameters and p.requires_grad)
+                                p for n, p in opt_model.named_parameters() if (n in decay_parameters and n in projector_parameters and p.requires_grad and "l0_module" not in n)
                             ],
                             "weight_decay": self.args.weight_decay,
                             "lr": self.args.mm_projector_lr,
                         },
                         {
                             "params": [
-                                p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n in projector_parameters and p.requires_grad)
+                                p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n in projector_parameters and p.requires_grad and "l0_module" not in n)
                             ],
                             "weight_decay": 0.0,
                             "lr": self.args.mm_projector_lr,
@@ -246,18 +294,39 @@ class LLaVATrainer(Trainer):
                 optimizer_grouped_parameters = [
                     {
                         "params": [
-                            p for n, p in opt_model.named_parameters() if (n in decay_parameters and p.requires_grad)
+                            p for n, p in opt_model.named_parameters() if (n in decay_parameters and p.requires_grad and "l0_module" not in n)
                         ],
                         "weight_decay": self.args.weight_decay,
                     },
                     {
                         "params": [
-                            p for n, p in opt_model.named_parameters() if (n not in decay_parameters and p.requires_grad)
+                            p for n, p in opt_model.named_parameters() if (n not in decay_parameters and p.requires_grad and "l0_module" not in n)
                         ],
                         "weight_decay": 0.0,
                     },
                 ]
-            # print([n for n, p in opt_model.named_parameters() if p.requires_grad])
+            if optimizer_grouped_parameters is None:
+                optimizer_grouped_parameters = []
+            l0_module_params = [p for n, p in opt_model.named_parameters() if "l0_module" in n and "lambda" not in n]
+            lagrange_params = [p for n, p in opt_model.named_parameters() if "l0_module" in n and "lambda" in n]
+
+            optimizer_grouped_parameters = optimizer_grouped_parameters + [
+                {
+                    "params": l0_module_params,
+                    "weight_decay": 0.0,
+                    "lr": self.args.lag_lr,
+                },
+                {
+                    "params": lagrange_params,
+                    "weight_decay": 0.0,
+                    "lr": -(self.args.lag_lr),
+                },
+            ]
+            
+            # for n, p in opt_model.named_parameters():
+            #     if p.requires_grad:
+            #         print(n)
+
             optimizer_cls, optimizer_kwargs = Trainer.get_optimizer_cls_and_kwargs(self.args)
 
             self.optimizer = optimizer_cls(optimizer_grouped_parameters, **optimizer_kwargs)
@@ -278,8 +347,8 @@ class LLaVATrainer(Trainer):
         return self.optimizer
 
     def _save_checkpoint(self, model, trial, metrics=None):
-        # super(LLaVATrainer, self)._save_checkpoint(model, trial, metrics)
-        super(LLaVATrainer, self)._save_checkpoint(model, trial)
+        super(LLaVATrainer, self)._save_checkpoint(model, trial, metrics)
+        # super(LLaVATrainer, self)._save_checkpoint(model, trial)
 
         if getattr(self.args, 'save_vision_tower', False):
             from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR

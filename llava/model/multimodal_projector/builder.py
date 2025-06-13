@@ -39,10 +39,19 @@ def build_vision_projector(config, delay_load=False, **kwargs):
     mlp_gelu_match = re.match(r'^mlp(\d+)x_gelu$', projector_type)
     if mlp_gelu_match:
         mlp_depth = int(mlp_gelu_match.group(1))
-        modules = [nn.Linear(config.mm_hidden_size, config.hidden_size)]
-        for _ in range(1, mlp_depth):
+        if hasattr(config, 'old_hidden_size'):
+            print(f'This is a pruned model, using old_hidden_size {config.old_hidden_size} for vision projector')
+            modules = [nn.Linear(config.mm_hidden_size, config.old_hidden_size)]
+            for _ in range(1, mlp_depth-1):
+                modules.append(nn.GELU())
+                modules.append(nn.Linear(config.old_hidden_size, config.old_hidden_size))
             modules.append(nn.GELU())
-            modules.append(nn.Linear(config.hidden_size, config.hidden_size))
+            modules.append(nn.Linear(config.old_hidden_size, config.hidden_size))
+        else:
+            modules = [nn.Linear(config.mm_hidden_size, config.hidden_size)]
+            for _ in range(1, mlp_depth):
+                modules.append(nn.GELU())
+                modules.append(nn.Linear(config.hidden_size, config.hidden_size))
         return nn.Sequential(*modules)
 
     if projector_type == 'identity':

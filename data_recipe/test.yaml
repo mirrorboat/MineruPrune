@@ -1,0 +1,5 @@
+datasets:
+  # - json_path: /mnt/hwfile/opendatalab/bigdata_mineru/liuzheng/Mineru/dataset/Stage2/Mineru_exam_en-8k.json
+  #   sampling_strategy: "all" # "random:15000"
+  - json_path: /mnt/hwfile/opendatalab/guzhuangcheng/data/mineru_extract/grounding/got-mmd/filtered2/mineru2_inhouse_exam_en_box-type-md.json
+    sampling_strategy: "all"
